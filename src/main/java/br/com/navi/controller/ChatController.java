@@ -48,6 +48,7 @@ public class ChatController {
                 .user(request.getPrompt())
                 .call();
         model.addAttribute("chatResponse", new ChatResponse(resp.content()));
+        model.addAttribute("perguntaRealizada", request.getPrompt());
         return "chat";
     }
 

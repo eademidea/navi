@@ -6,12 +6,18 @@
 </head>
 <body>
 
+
 <div class="main">
-    <a href="./chat">Limpar Chat</a>
-    <h1>Bem-vindo ao Navi!</h1>
-    <div id="chatresponse" th:if="${chatResponse}">
-        <h2>Resposta:</h2>
-        <p th:text="${chatResponse.reply}"></p>
+
+    <div class="cabecalho">
+        <h1>Bem-vindo ao Navi!</h1>
+        <a href="./chat">Limpar Chat</a>
+    </div>
+
+
+    <div class="chat" >
+        <p class="pergunta" th:if="${perguntaRealizada}" th:text="${perguntaRealizada}">Aqui ficará a pergunta?</p>
+        <p th:if="${chatResponse}" th:text="${chatResponse.reply}" class="resposta">Aqui ficará a resposta.</p>
     </div>
 
     <div id="prompt">

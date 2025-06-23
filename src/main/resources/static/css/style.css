@@ -1,3 +1,48 @@
+.cabecalho{
+    margin: 0;
+    width: 100%;
+    height: 15%;
+    background-color: black;
+    border-radius: 1%;
+}
+
+.cabecalho h1{
+    margin:0;
+    color: whitesmoke;
+    position: relative;
+    text-align: center;
+}
+
+.cabecalho a{
+    margin:0;
+    color: whitesmoke;
+    position: relative;
+}
+
+.chat .pergunta{
+    color: black;
+      position: relative;
+      right: 0%;
+      width: 50%;
+      background: gray;
+      border-radius: 13%;
+      width: 40%;
+      left: 1%;
+      padding: 1%;
+}
+
+.chat .resposta{
+    color: black;
+      position: relative;
+      right: -56%;
+      width: 50%;
+      background: gray;
+      border-radius: 13%;
+      width: 40%;
+      right: -56%;
+      padding: 1%;
+}
+
 body{
     margin: 0;
     height: 100vh;
@@ -9,4 +54,25 @@ body{
     width: 80%;
     height: 80%;
     background-color: whitesmoke;
+    border-radius: 1%;
+}
+
+form {
+    position: fixed;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px; /* espaço entre input e botão */
+    justify-content: center;
+    align-items: center;
+}
+
+#prompt {
+    width: 400px;
+    padding: 8px;
+}
+
+form button {
+    padding: 8px 16px;
 }
