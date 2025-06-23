@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Navi</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="main">
+    <a href="./chat">Limpar Chat</a>
+    <h1>Bem-vindo ao Navi!</h1>
+    <div id="chatresponse" th:if="${chatResponse}">
+        <h2>Resposta:</h2>
+        <p th:text="${chatResponse.reply}"></p>
+    </div>
+
+    <div id="prompt">
+        <form th:action="@{/ask}" th:object="${chatRequest}" method="post">
+            <input type="text" th:field="*{prompt}" placeholder="Olá bom dia como posso lhe ajudar?"/>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
