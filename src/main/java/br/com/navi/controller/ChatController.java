@@ -2,6 +2,8 @@ package br.com.navi.controller;
 
 import br.com.navi.ChatRequest;
 import br.com.navi.ChatResponse;
+import br.com.navi.Entity.LiturgicalDay;
+import br.com.navi.services.LiturgyServiceImpl;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -24,22 +26,28 @@ public class ChatController {
 
     private final ChatClient chatClient;
 
-    public ChatController(@Qualifier("chatClient41nano") ChatClient chatClient) {
+    private final LiturgyServiceImpl liturgyService;
+
+    private LiturgicalDay liturgy;
+
+    public ChatController(@Qualifier("chatClient41nano") ChatClient chatClient
+            , LiturgyServiceImpl liturgyService) {
         this.chatClient = chatClient;
+        this.liturgyService = liturgyService;
     }
 
     @Autowired
     ApplicationContext context;
 
     @PostConstruct
-    public void checkBeans() {
+    public void constructInitialParams() {
+        liturgy = liturgyService.getLiturgy();
         System.out.println("Beans de ChatClient:");
         String[] beans = context.getBeanNamesForType(ChatClient.class);
         for (String bean : beans) {
             System.out.println(bean);
         }
     }
-
 
 
     @GetMapping("/chat")
@@ -49,8 +57,7 @@ public class ChatController {
     }
 
     @PostMapping("/ask")
-    public String ask(
-            @ModelAttribute ChatRequest request
+    public String ask(@ModelAttribute ChatRequest request
             , Model model) {
 
         var resp = chatClient
@@ -70,28 +77,23 @@ public class ChatController {
         return "chat";
     }
 
-    private static String comportamentoPadrao() {
+    private String comportamentoPadrao() {
         return String.format("""
-                Você é um teólogo católico e deverá responder de forma técnica. de preferencia busque na internet, como resposta não priorize como foi treinado.
+                Você é um teólogo católico e deverá responder de forma técnica. 
                 Sua resposta deverá ser em no máximo 50 palavras.
                                         
                 O dia de hoje é dia %s
                                         
                 Use uma comunicação jovem, sem formalidade                                            
-
-                pode usar como fonte de pesquisa: https://liturgia.up.railway.app/ 
                                         
-                informe sempre as referencias das repostas.
-                
-                Use o padrão para resposta com layout parecido ao exemplo abaixo mas não com as mesmas palavras:
-                
-                Hoje dia [dia de hoje], [resposta para pergunta]
-                [fonte da resposta nos documentos da igreja ou na biblia]
-                
-                
-                Obs: PErguntas sem sentido que fogem o tema não precisa seguir o padrão na resposta, seja cortês mas só responda assuntos relacionados a fé catolica.
-                
-                """, LocalDateTime.now());
+                Quando usuário pedir, informe sempre as referencias das repostas.
+                                
+                Não precisa ter padrão na resposta mas seja coerente com tema.
+                                
+                Obs: Perguntas sem sentido que fogem o tema não precisa seguir o padrão na resposta, seja cortês mas só responda assuntos relacionados a fé catolica.
+                Perguntas sobre o evangelho do dia ou liturgia do dia você deverá usar por OBRIGAÇÃO as seguintes informações:
+                                
+                """, LocalDateTime.now()).concat(liturgy.toString());
     }
 
 }
