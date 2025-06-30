@@ -2,7 +2,6 @@ package br.com.navi.controller;
 
 import br.com.navi.ChatRequest;
 import br.com.navi.ChatResponse;
-import br.com.navi.Entity.LiturgicalDay;
 import br.com.navi.services.LiturgyServiceImpl;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
@@ -18,6 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //@RestController //Usado para API retorna JSON
 @Controller // usado para renderizar páginas HTML com Thymeleaf.
@@ -28,7 +31,9 @@ public class ChatController {
 
     private final LiturgyServiceImpl liturgyService;
 
-    private LiturgicalDay liturgy;
+    private String liturgy;
+
+    private List<ChatResponse> responses = new ArrayList<>();
 
     public ChatController(@Qualifier("chatClient41nano") ChatClient chatClient
             , LiturgyServiceImpl liturgyService) {
@@ -41,7 +46,6 @@ public class ChatController {
 
     @PostConstruct
     public void constructInitialParams() {
-        liturgy = liturgyService.getLiturgy();
         System.out.println("Beans de ChatClient:");
         String[] beans = context.getBeanNamesForType(ChatClient.class);
         for (String bean : beans) {
@@ -52,6 +56,7 @@ public class ChatController {
 
     @GetMapping("/chat")
     public String chat(Model model) {
+        liturgy = liturgyService.getLiturgy();
         model.addAttribute("chatRequest", new ChatRequest());
         return "chat";
     }
@@ -72,8 +77,14 @@ public class ChatController {
                         .build())
                 .advisors(new SimpleLoggerAdvisor())
                 .call();
-        model.addAttribute("chatResponse", new ChatResponse(resp.content()));
-        model.addAttribute("perguntaRealizada", request.getPrompt());
+
+
+        responses.add(new ChatResponse(request.getPrompt(), "pergunta"));
+        responses.add(new ChatResponse(resp.content(), "resposta"));
+
+
+        model.addAttribute("chatMessage", responses);
+//        model.addAttribute("perguntaRealizada", respostas);
         return "chat";
     }
 
@@ -93,7 +104,7 @@ public class ChatController {
                 Obs: Perguntas sem sentido que fogem o tema não precisa seguir o padrão na resposta, seja cortês mas só responda assuntos relacionados a fé catolica.
                 Perguntas sobre o evangelho do dia ou liturgia do dia você deverá usar por OBRIGAÇÃO as seguintes informações:
                                 
-                """, LocalDateTime.now()).concat(liturgy.toString());
+                """, LocalDateTime.now()).concat(liturgy);
     }
 
 }

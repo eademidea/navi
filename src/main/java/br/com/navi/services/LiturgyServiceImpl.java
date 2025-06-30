@@ -1,6 +1,5 @@
 package br.com.navi.services;
 
-import br.com.navi.Entity.LiturgicalDay;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,16 +17,16 @@ public class LiturgyServiceImpl {
         this.restTemplate = restTemplate;
     }
 
-    public LiturgicalDay getLiturgy() {
-//        log.info("Realizando chamada no https://liturgia.up.railway.app/");
+    public String getLiturgy() {
         var response = restTemplate.exchange("https://liturgia.up.railway.app/"
                 , HttpMethod.GET
                 , getRequestEntity()
-                , LiturgicalDay.class);
+                , Object.class);
         if (!(response.hasBody() && response.getStatusCode().is2xxSuccessful())) {
+            throw new RuntimeException("Erro na chamada da api liturgia.up.railway.app");
             //TODO: Lançar exceção realizar tratativa
         }
-        return response.getBody();
+        return response.getBody().toString();
     }
 
     private static HttpEntity<Object> getRequestEntity() {

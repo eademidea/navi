@@ -19,25 +19,31 @@
     position: relative;
 }
 
+.chat {
+    overflow-y: auto;
+    height: 60vh; /* ou por exemplo: 400px */
+    padding: 10px;
+}
+
 .chat .pergunta{
-    color: black;
+    color: whitesmoke;
       position: relative;
       right: 0%;
       width: 50%;
-      background: gray;
-      border-radius: 13%;
+      background: #144d37;
+      border-radius: 5px;
       width: 40%;
       left: 1%;
       padding: 1%;
 }
 
 .chat .resposta{
-    color: black;
+    color: whitesmoke;
       position: relative;
       right: -56%;
       width: 50%;
-      background: gray;
-      border-radius: 13%;
+      background: #242626;
+      border-radius: 5px;
       width: 40%;
       right: -56%;
       padding: 1%;

@@ -16,8 +16,7 @@
 
 
     <div class="chat" >
-        <p class="pergunta" th:if="${perguntaRealizada}" th:text="${perguntaRealizada}">Aqui ficará a pergunta?</p>
-        <p th:if="${chatResponse}" th:text="${chatResponse.reply}" class="resposta">Aqui ficará a resposta.</p>
+        <p th:each="msg : ${chatMessage}" th:class="${msg.classCss}" th:if="${chatMessage}" th:text="${msg.reply}">Aqui ficará a pergunta?</p>
     </div>
 
     <div id="prompt">
@@ -27,6 +26,13 @@
         </form>
     </div>
 </div>
+
+<script>
+    window.onload = () => {
+      const chatBox = document.querySelector('.chat');
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+</script>
 
 </body>
 </html>
