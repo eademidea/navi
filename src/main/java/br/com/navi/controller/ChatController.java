@@ -2,7 +2,11 @@ package br.com.navi.controller;
 
 import br.com.navi.ChatRequest;
 import br.com.navi.ChatResponse;
+import br.com.navi.Entity.LiturgicalDay;
+import br.com.navi.Entity.SemanalLiturgicalDay;
 import br.com.navi.services.LiturgyServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +60,13 @@ public class ChatController {
 
 
     @GetMapping("/chat")
-    public String chat(Model model) {
+    public String chat(Model model) throws JsonProcessingException {
         liturgy = liturgyService.getLiturgy();
+//        if (LocalDate.now().getDayOfWeek().ordinal() == 7) {
+//            var response =  new ObjectMapper().readValue(liturgy, LiturgicalDay.class);
+//        } else {
+//            var response =  new ObjectMapper().readValue(liturgy, SemanalLiturgicalDay.class);
+//        }
         model.addAttribute("chatRequest", new ChatRequest());
         return "chat";
     }
@@ -104,7 +114,7 @@ public class ChatController {
                 Obs: Perguntas sem sentido que fogem o tema não precisa seguir o padrão na resposta, seja cortês mas só responda assuntos relacionados a fé catolica.
                 Perguntas sobre o evangelho do dia ou liturgia do dia você deverá usar por OBRIGAÇÃO as seguintes informações:
                                 
-                """, LocalDateTime.now()).concat(liturgy);
+                """, LocalDateTime.now()).concat(liturgy.toString());
     }
 
 }

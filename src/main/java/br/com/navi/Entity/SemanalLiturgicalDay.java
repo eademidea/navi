@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LiturgicalDay implements Serializable {
+public class SemanalLiturgicalDay implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ public class LiturgicalDay implements Serializable {
     private Psalm psalm;
 
     @JsonProperty("segundaLeitura")
-    private SecondReading secondReading;
+    private String secondReading;
 
     @JsonProperty("evangelho")
     private Gospel gospel;

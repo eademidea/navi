@@ -21,12 +21,13 @@ public class LiturgyServiceImpl {
         var response = restTemplate.exchange("https://liturgia.up.railway.app/"
                 , HttpMethod.GET
                 , getRequestEntity()
-                , Object.class);
+                , String.class);
         if (!(response.hasBody() && response.getStatusCode().is2xxSuccessful())) {
             throw new RuntimeException("Erro na chamada da api liturgia.up.railway.app");
             //TODO: Lançar exceção realizar tratativa
         }
-        return response.getBody().toString();
+
+        return response.getBody();
     }
 
     private static HttpEntity<Object> getRequestEntity() {
